@@ -9,7 +9,7 @@
     • **Autor(es):** [aria Conceição, Yasmin Moreira, Ravisya Narciso, Julia Carmo.   ]
     • **Data de início:** [17/03/2007]
 
-
+## 2 Estrutura do Projeto
        A_quiz/
 ├── cadastro/                   # Módulo de cadastro de usuários
 │   ├── bd.txt                  # Esboço/estrutura de banco de dados
