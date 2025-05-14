@@ -52,7 +52,7 @@
     
 1. Clone o repositório:
 bash
-git clone https://github.com/mimistudies90/Sistema-de-Sorteio.git
+git clone https://github.com/mimistudies90/Sistema-Quiz.git
 cd 
 
  2. Instale as dependências:
