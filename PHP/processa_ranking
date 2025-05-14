@@ -1,0 +1,31 @@
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Configurações do banco de dados
+$servername = "localhost"; 
+$database = "meu_banco";  
+$username = "meu_usuario"; 
+$password = "minha_senha"; 
+
+try {  
+    $conn = new PDO("mysql:host=$servername;dbname=$database", $username, $password); 
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+
+    // Consulta SQL
+    $sql = "SELECT nome, pontuacao FROM tbl_ranking"; 
+    $stmt = $conn->prepare($sql); 
+    $stmt->execute(); 
+
+    // Recuperar os resultados
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC); 
+    var_dump($result); // Verifique o que está sendo retornado
+
+    // Exibir os resultados
+    foreach ($result as $row) {
+        echo "Nome: " . htmlspecialchars($row['nome']) . " - Pontuação: " . htmlspecialchars($row['pontuacao']) . "<br>"; 
+    }
+} catch (PDOException $e) { 
+    echo 'Erro: ' . $e->getMessage(); 
+} 
+?>"
