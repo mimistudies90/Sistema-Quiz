@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F0F8FF;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            display: inline-block;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        p {
+            font-size: 18px;
+            color: #555;
+        }
+        .gif-container {
+            margin: 20px 0;
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #6A5ACD;
+        }
+        img {
+            width: 150px;
+            height: auto;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Cadastro</h1>
+
+<?php
+// Conexão com o banco de dados
+$servername = "localhost";
+$username = "root";
+$password = "&tec77@info!";
+$dbname = "db_quiz";
+
+// Criar conexão
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Verificar conexão
+if ($conn->connect_error) {
+    die("<p>Conexão falhou: " . $conn->connect_error . "</p>");
+}
+
+// Obter dados do formulário
+$nome = trim($_POST['nome']);
+$email = trim($_POST['email']);
+$senha = trim($_POST['senha']);
+
+// Validação de dados
+if (empty($nome) || empty($email) || empty($senha)) {
+    die("<p>Todos os campos são obrigatórios.</p>");
+}
+
+if (!preg_match("/^[a-zA-Z\s]+$/", $nome)) {
+    die("<p>O nome deve conter apenas letras e espaços.</p>");
+}
+
+// Verificar se o email já existe
+$sql = "SELECT * FROM db_quiz.tbl_usuario WHERE email = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    die("<p>Este email já está cadastrado.</p>");
+}
+
+// Criptografar a senha
+$senha_hash = password_hash($senha, PASSWORD_DEFAULT);
+
+// Inserir novo usuário
+$sql = "INSERT INTO db_quiz.tbl_usuario (nome_usuario, email, senha) VALUES (?, ?, ?)";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("sss", $nome, $email, $senha_hash);
+
+if ($stmt->execute()) {
+    echo "<p>Cadastro realizado com sucesso!</p>";
+    echo '<div class="gif-container"><img src="jin.jpg" alt="Sucesso"></div>';
+} else {
+    echo "<p>Erro: " . $stmt->error . "</p>";
+    echo '<div class="gif-container"><img src="caminho/para/erro.png" alt="Erro"></div>';
+}
+
+// Fechar conexão
+$stmt->close();
+$conn->close();
+?>
+
+    <a href="cadastro.php" class="btn">Voltar à Tela Inicial</a>
+</div>
+
+</body>
+</html>
